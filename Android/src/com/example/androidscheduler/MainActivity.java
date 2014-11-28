@@ -89,7 +89,7 @@ public class MainActivity extends Activity {
         for(int i = 1; i < 10; i++)
         {
         	// mAdapter 1~9 class (time)
-        	mAdapter.add(i+"±³½Ã");
+        	mAdapter.add(i+"êµì‹œ    "+(i+8)+":"+30);
         }
         
         ClassInfo ci = new ClassInfo("", "Wed", 3, "303");
