@@ -5,8 +5,7 @@ import java.util.ArrayList;
 public class ClassInfo {
 	
 	public String name;
-//	public ArrayList<Timeinfo> time;	// time은 수,2 수,3 이런식의 정보를 ArrayList로 저장
-	public ArrayList<String> day;
+	public ArrayList<String> day;		// day - number ex) mon - 2, mon - 3
 	public ArrayList<Integer> number;
 	public String detail;
 	
