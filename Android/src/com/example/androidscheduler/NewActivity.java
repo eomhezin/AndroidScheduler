@@ -19,7 +19,7 @@ public class NewActivity extends Activity {
     }
     
     public void onButtonReturnClicked(View v){
-    	Toast.makeText(getApplicationContext(), "돌아가기 버튼이 눌렸습니다.", Toast.LENGTH_LONG).show();
+    	Toast.makeText(getApplicationContext(), "pushed return", Toast.LENGTH_LONG).show();
     	
     	Intent intent = new Intent();
     	setResult(1000, intent);

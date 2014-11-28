@@ -80,7 +80,7 @@ public class MainActivity extends Activity {
         	mAdapter.add(i+"교시");
         }
         
-        ClassInfo ci = new ClassInfo("", "수", 3, "303");
+        ClassInfo ci = new ClassInfo("", "Wed", 3, "303");
         
         for(int i = 0; i < 9; i++)
         {
@@ -91,7 +91,7 @@ public class MainActivity extends Activity {
         	mAdapterFri.add(ci);
         	mAdapterSat.add(ci);
         }
-        ClassInfo ci1 = new ClassInfo("화학", "월", 1, "예제");
+        ClassInfo ci1 = new ClassInfo("Chemistry", "Mon", 1, "example");
         mAdapterMon.edit(0,ci1);
         mListViewMon.setOnItemClickListener(new CustomClickListner());
         mListViewTue.setOnItemClickListener(new CustomClickListner());
