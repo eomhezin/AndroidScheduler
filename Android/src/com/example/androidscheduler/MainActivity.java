@@ -29,6 +29,7 @@ public class MainActivity extends Activity {
 	private CustomAdapter mAdapterThu;
 	private CustomAdapter mAdapterFri;
 	private CustomAdapter mAdapterSat;
+	private String[]	  Day = {"Mon","Tue","Wed","Thu","Fri","Sat"};
 	
 	//item listener
 		public class CustomClickListner implements OnItemClickListener{
@@ -38,7 +39,18 @@ public class MainActivity extends Activity {
 					long id) {
 				Intent intent = new Intent(MainActivity.this, NewActivity.class);
 				
-				Toast.makeText(getApplicationContext(), "pos = " + position + "id = " + parent.getId(), Toast.LENGTH_LONG).show();
+				int monId 			= mListViewMon.getId();
+				int currentId 		= parent.getId();
+				String currentDay	= new String();
+				
+				for(int i = 0; i < 6; i++)
+				{
+					if((currentId - monId) == i)
+					{
+						currentDay = Day[i];	// return <- click item - day
+					}
+				}
+				Toast.makeText(getApplicationContext(), currentDay, Toast.LENGTH_LONG).show();
 				startActivityForResult(intent, 1001);
 			}
 		}
@@ -47,7 +59,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+
      // listview - adapterview -- need adapter
         mAdapter = new mCustomAdapter();
         mAdapterMon = new CustomAdapter();
@@ -59,12 +71,12 @@ public class MainActivity extends Activity {
         
         // get listview id
         mListView = (ListView) findViewById(R.id.listview);
-        mListViewMon = (ListView) findViewById(R.id.listview_mon);
-        mListViewTue = (ListView) findViewById(R.id.listview_tue);
-        mListViewWed = (ListView) findViewById(R.id.listview_wed);
-        mListViewThu = (ListView) findViewById(R.id.listview_thu);
-        mListViewFri = (ListView) findViewById(R.id.listview_fri);
-        mListViewSat = (ListView) findViewById(R.id.listview_sat);
+        mListViewMon = (ListView) findViewById(R.id.listview_1);
+        mListViewTue = (ListView) findViewById(R.id.listview_2);
+        mListViewWed = (ListView) findViewById(R.id.listview_3);
+        mListViewThu = (ListView) findViewById(R.id.listview_4);
+        mListViewFri = (ListView) findViewById(R.id.listview_5);
+        mListViewSat = (ListView) findViewById(R.id.listview_6);
         
         mListView.setAdapter(mAdapter);
         mListViewMon.setAdapter(mAdapterMon);

@@ -96,22 +96,14 @@
         </ListView>
 
         <ListView
-            android:id="@+id/listview_mon"
+            android:id="@+id/listview_1"
             android:layout_width="52.4dp"
             android:layout_height="fill_parent"
             android:layout_weight="0" >
         </ListView>
 
         <ListView
-            android:id="@+id/listview_tue"
-            android:layout_width="52.4dp"
-            android:layout_height="fill_parent"
-            android:layout_marginLeft="1dp"
-            android:layout_weight="0" >
-        </ListView>
-
-        <ListView
-            android:id="@+id/listview_wed"
+            android:id="@+id/listview_2"
             android:layout_width="52.4dp"
             android:layout_height="fill_parent"
             android:layout_marginLeft="1dp"
@@ -119,7 +111,7 @@
         </ListView>
 
         <ListView
-            android:id="@+id/listview_thu"
+            android:id="@+id/listview_3"
             android:layout_width="52.4dp"
             android:layout_height="fill_parent"
             android:layout_marginLeft="1dp"
@@ -127,7 +119,7 @@
         </ListView>
 
         <ListView
-            android:id="@+id/listview_fri"
+            android:id="@+id/listview_4"
             android:layout_width="52.4dp"
             android:layout_height="fill_parent"
             android:layout_marginLeft="1dp"
@@ -135,7 +127,15 @@
         </ListView>
 
         <ListView
-            android:id="@+id/listview_sat"
+            android:id="@+id/listview_5"
+            android:layout_width="52.4dp"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="1dp"
+            android:layout_weight="0" >
+        </ListView>
+
+        <ListView
+            android:id="@+id/listview_6"
             android:layout_width="52.4dp"
             android:layout_height="fill_parent"
             android:layout_marginLeft="1dp"
