@@ -1,133 +1,170 @@
 package com.example.androidscheduler;
 
-import android.app.Activity;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.Socket;
+import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
-import android.os.*;
+import android.view.View.OnClickListener;
+import android.widget.*;
 
+public class MainActivity extends ActionBarActivity implements OnClickListener {
+	Button loginBtn;
+	Button goBtn;
+	RelativeLayout layout;
+	public PrintWriter streamOut = null;
+	public BufferedReader streamIn = null;
+	public Socket cSocket = null;
+	public chatThread cThread = null;
+	public EditText idtv;
+	public EditText pwtv;
 
-public class MainActivity extends Activity {
-	
-	private ListView mListView;
-	private ListView mListViewMon;
-	private ListView mListViewTue;
-	private ListView mListViewWed;
-	private ListView mListViewThu;
-	private ListView mListViewFri;
-	private ListView mListViewSat;
-	private mCustomAdapter mAdapter;
-	private CustomAdapter mAdapterMon;
-	private CustomAdapter mAdapterTue;
-	private CustomAdapter mAdapterWed;
-	private CustomAdapter mAdapterThu;
-	private CustomAdapter mAdapterFri;
-	private CustomAdapter mAdapterSat;
-	private String[]	  Day = {"Mon","Tue","Wed","Thu","Fri","Sat"};
-	
-	//item listener
-	public class CustomClickListner implements OnItemClickListener {
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		layout = (RelativeLayout) findViewById(R.id.layout);
+		layout.setBackgroundResource(R.drawable.background);
 
-		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position,
-				long id) {
-			Intent intent = new Intent(MainActivity.this, NewActivity.class);
+		loginBtn = (Button) findViewById(R.id.loginbtn);
+		goBtn = (Button) findViewById(R.id.gobtn);
+		idtv = (EditText) findViewById(R.id.Idet);
+		pwtv = (EditText) findViewById(R.id.Pwet);
+		goBtn.setOnClickListener(this);/*
+										 * new OnClickListener() {
+										 * 
+										 * public void onClick(View v) { Intent
+										 * intent = new
+										 * Intent(MainActivity.this,
+										 * Worklist.class);
+										 * startActivity(intent); } });
+										 */
+		cThread = new chatThread();
+		cThread.start();
+		loginBtn.setOnClickListener(new OnClickListener() {
 
-			int monId = mListViewMon.getId();
-			int currentId = parent.getId();
-			String currentDay = new String();
+			public void onClick(View v) {
+				Log.d("CHOI", "Send!");
+				sendMessage(MakingProtocol.Login_info(getCurrentMacAddress(),
+						idtv.getText().toString(), pwtv.getText().toString()));
+				// loginBtn.setText("Login~ing");
+				// loginBtn.setEnabled(false);
+				// goBtn.setEnabled(true);
 
-			for (int i = 0; i < 6; i++) {
-				if ((currentId - monId) == i) {
-					currentDay = Day[i]; // return <- click item - day
+				// goBtn.setEnabled(true);
+				/*
+				 * cThread = new chatThread(); cThread.start();
+				 */
+				// Intent intent = new Intent(MainActivity.this,Worklist.class);
+			}
+		});
+
+	}
+
+	public Handler mHandler = new Handler() { // 스레드에서 메세지를 받을 핸들러.
+		public void handleMessage(Message msg) {
+			// Log.d("Receive Message","msg = "+msg.obj.toString());
+			String response = msg.obj.toString();
+			String response2[] = response.split("/");
+			if (response2[0].equals("login")) {
+				if (response2[2].equals("ok")) {
+					Log.d("Yoon", response2[2]);
+					loginBtn.setText("Completed");
+					loginBtn.setEnabled(false);
+					goBtn.setEnabled(true);
 				}
 			}
-			Toast.makeText(getApplicationContext(), currentDay,
-					Toast.LENGTH_LONG).show();
-			startActivityForResult(intent, 1001);
+		}
+	};
+
+	private void sendMessage(String MSG) {
+		try {
+			streamOut.println(MSG); // 서버에 메세지를 보내줍니다.
+		} catch (Exception ex) {
+			Log.d("SendError", ex.toString());
 		}
 	}
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        
-        // listview - adapterview -- need adapter
-        mAdapter = new mCustomAdapter();
-        mAdapterMon = new CustomAdapter();
-        mAdapterTue = new CustomAdapter();
-        mAdapterWed = new CustomAdapter();
-        mAdapterThu = new CustomAdapter();
-        mAdapterFri = new CustomAdapter();
-        mAdapterSat = new CustomAdapter();
-        
-        // get listview id
-        mListView = (ListView) findViewById(R.id.listview);
-        mListViewMon = (ListView) findViewById(R.id.listview_1);
-        mListViewTue = (ListView) findViewById(R.id.listview_2);
-        mListViewWed = (ListView) findViewById(R.id.listview_3);
-        mListViewThu = (ListView) findViewById(R.id.listview_4);
-        mListViewFri = (ListView) findViewById(R.id.listview_5);
-        mListViewSat = (ListView) findViewById(R.id.listview_6);
-        
-        mListView.setAdapter(mAdapter);
-        mListViewMon.setAdapter(mAdapterMon);
-        mListViewTue.setAdapter(mAdapterTue);
-        mListViewWed.setAdapter(mAdapterWed);
-        mListViewThu.setAdapter(mAdapterThu);
-        mListViewFri.setAdapter(mAdapterFri);
-        mListViewSat.setAdapter(mAdapterSat);
-        
-        for(int i = 1; i < 10; i++)
-        {
-        	mAdapter.add((i+8)+":"+30);
-        }
-        
-        ClassInfo ci = new ClassInfo("", "Wed", 3, "303");
-        
-        for(int i = 0; i < 9; i++)
-        {
-        	mAdapterMon.add(ci);
-        	mAdapterTue.add(ci);
-        	mAdapterWed.add(ci);
-        	mAdapterThu.add(ci);
-        	mAdapterFri.add(ci);
-        	mAdapterSat.add(ci);
-        }
-        ClassInfo ci1 = new ClassInfo("Chemistry", "Mon", 1, "example");
-        mAdapterMon.edit(0,ci1);
-        mListViewMon.setOnItemClickListener(new CustomClickListner());
-        mListViewTue.setOnItemClickListener(new CustomClickListner());
-        mListViewWed.setOnItemClickListener(new CustomClickListner());
-        mListViewThu.setOnItemClickListener(new CustomClickListner());
-        mListViewFri.setOnItemClickListener(new CustomClickListner());
-        mListViewSat.setOnItemClickListener(new CustomClickListner());
-    }
+	public String getCurrentMacAddress() {
+		String macAddress = "";
+		boolean bIsWifiOff = false;
 
+		WifiManager wfManager = (WifiManager) getSystemService(WIFI_SERVICE);
+		if (!wfManager.isWifiEnabled()) {
+			wfManager.setWifiEnabled(true);
+			bIsWifiOff = true;
+		}
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
+		WifiInfo wfInfo = wfManager.getConnectionInfo();
+		macAddress = wfInfo.getMacAddress();
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+		if (bIsWifiOff) {
+			wfManager.setWifiEnabled(false);
+			bIsWifiOff = false;
+		}
+
+		return macAddress;
+
+	}
+
+	class chatThread extends Thread {
+		private boolean flag = false; // 스레드 유지(종료)용 플래그
+
+		public void run() {
+			try {
+				cSocket = SocketManager.getSocket();// new Socket(server, port);
+				// Log.d("Choi",server+"/"+port+"/"+user);
+				streamOut = new PrintWriter(new BufferedWriter(
+						new OutputStreamWriter(cSocket.getOutputStream())),
+						true);// new PrintWriter(cSocket.getOutputStream(),
+								// true); // 출력용 스트림
+				streamIn = new BufferedReader(new InputStreamReader(
+						cSocket.getInputStream())); // 입력용 스트림
+
+				// sendMessage(getCurrentMacAddress()+"/"+pwtv.getText().toString());
+
+				while (!flag) { // 플래그가 false일경우에 루프
+					String msgs;
+					Message msg = new Message();
+					msg.what = 0;
+					msgs = streamIn.readLine(); // 서버에서 올 메세지를 기다린다.
+					msg.obj = msgs;
+
+					mHandler.sendMessage(msg); // 핸들러로 메세지 전송
+
+					/*
+					 * if (msgs.equals("# [" + nickName + "]님이 나가셨습니다.")) { //
+					 * 서버에서 온 메세지가 종료 메세지라면 flag = true; // 스레드 종료를 위해 플래그를
+					 * true로 바꿈. msg = new Message(); msg.what = 1; // 종료메세지
+					 * mHandler.sendMessage(msg); }
+					 */
+				}
+
+			} catch (Exception e) {
+				// logger(e.getMessage());
+			}
+		}
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		Log.d("Choi", "Activity전환");
+		// Intent intent = new Intent(this,Worklist.class);
+		Intent intent = new Intent(this, SectorList.class);
+		startActivity(intent);
+	}
+
 }
