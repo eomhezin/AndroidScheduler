@@ -3,6 +3,7 @@ package com.example.androidscheduler;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,18 +13,26 @@ import android.widget.Toast;
 
 public class NewActivity extends Activity {
 
+	private int xy = 0, x = 0, y = 0;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new);
         
+        Intent 	intent 	= getIntent();
+        
+        xy 		= intent.getIntExtra("xy", 0);
+        x		= (xy/10) - 1;
+        y		= (xy%10) - 1;
+        Log.d("NewResult",""+x+" "+y);
     }
     
     public void onButtonReturnClicked(View v){
-    	Toast.makeText(getApplicationContext(), "pushed return", Toast.LENGTH_LONG).show();
+//    	Toast.makeText(getApplicationContext(), "pushed return", Toast.LENGTH_LONG).show();
     	
     	Intent intent = new Intent();
-    	setResult(1000, intent);
+    	setResult(2000, intent);
     	finish();
     }
     
@@ -33,12 +42,13 @@ public class NewActivity extends Activity {
     	text = (EditText)findViewById(R.id.editText1);
     	
     	final String TEXT = text.getText().toString();
-    	Toast.makeText(getApplicationContext(), TEXT, Toast.LENGTH_LONG).show();
+//    	Toast.makeText(getApplicationContext(), TEXT, Toast.LENGTH_LONG).show();
     	
     	Intent intent = new Intent();
     	intent.putExtra("TEXT", TEXT);
+    	Log.d("NewButtonPush","TEXT is " + TEXT);
 
-    	setResult(1000, intent);
+    	setResult(2001, intent);
     	finish();
     }
 
