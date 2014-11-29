@@ -14,18 +14,31 @@ import android.widget.Toast;
 public class NewActivity extends Activity {
 
 	private int xy = 0, x = 0, y = 0;
+	private EditText text1;
+	private EditText text2;
+	private EditText text3;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new);
         
-        Intent 	intent 	= getIntent();
+//        Intent 	intent 	= getIntent();
+//        
+//        xy 		= intent.getIntExtra("xy", 0);
+//        x		= (xy/10) - 1;
+//        y		= (xy%10) - 1;
+//        Log.d("NewResult",""+x+" "+y);
         
-        xy 		= intent.getIntExtra("xy", 0);
-        x		= (xy/10) - 1;
-        y		= (xy%10) - 1;
-        Log.d("NewResult",""+x+" "+y);
+        text1 = (EditText)findViewById(R.id.editText1);
+        text2 = (EditText)findViewById(R.id.editText2);
+        text3 = (EditText)findViewById(R.id.editText3);
+        
+        Bundle bundle 	= getIntent().getExtras();
+        ClassInfo ci 	= bundle.getParcelable("ClassInfo");
+        
+        text1.setText(ci.getName());
+        Log.d("NewResult","NewActiviy CI Name is " + ci.getName());
     }
     
     public void onButtonReturnClicked(View v){
@@ -38,10 +51,8 @@ public class NewActivity extends Activity {
     
     public void onButtonPushClicked(View v){
 
-    	EditText text;
-    	text = (EditText)findViewById(R.id.editText1);
     	
-    	final String TEXT = text.getText().toString();
+    	final String TEXT = text1.getText().toString();
 //    	Toast.makeText(getApplicationContext(), TEXT, Toast.LENGTH_LONG).show();
     	
     	Intent intent = new Intent();

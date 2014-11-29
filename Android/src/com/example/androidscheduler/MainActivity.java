@@ -68,8 +68,10 @@ public class MainActivity extends Activity {
 			int xy = ((x+1)*10)+(y+1);
 			Log.d("clickListener",""+xy);
 			
-			intent.putExtra("xy", xy);
-			startActivityForResult(intent, 1000);
+//			ClassInfo ci = (ClassInfo)mCustomArray.get(x).getItem(y);
+//			
+//			intent.putExtra("ClassInfo", ci);
+//			startActivityForResult(intent, 1000);
 		}
 	}
 
