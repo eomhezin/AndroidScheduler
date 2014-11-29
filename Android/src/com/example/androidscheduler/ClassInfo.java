@@ -10,7 +10,7 @@ import android.os.Parcelable;
 public class ClassInfo implements Parcelable{
 	
 	public String name;
-	public List<String> day;		// day - number ex) mon - 2, mon - 3
+	public ArrayList<String> day;		// day - number ex) mon - 2, mon - 3
 	public ArrayList<Integer> number;
 	public String detail;
 	
@@ -18,12 +18,12 @@ public class ClassInfo implements Parcelable{
 			Integer number, String detail) {
 		
 		this.name = name;
-		if(day == null){
-			this.day = new ArrayList();
+		if(this.day == null){
+			this.day = new ArrayList<String>();
 		}
 		this.day.add(day);
-		if(number == null){
-			this.number = new ArrayList();
+		if(this.number == null){
+			this.number = new ArrayList<Integer>();
 		}
 		this.number.add(number);
 		this.detail = detail;
