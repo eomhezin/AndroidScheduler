@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.os.*;
 
@@ -49,11 +48,11 @@ public class MainActivity extends Activity {
 
 			monId = mListViewMon.getId();
 			int currentId = parent.getId();
-			String currentDay = new String();
+//			String currentDay = new String();
 
 			for (int i = 0; i < 6; i++) {
 				if ((currentId - monId) == i) {
-					currentDay = Day[i]; // return <- click item - day
+//					currentDay = Day[i]; // return <- click item - day
 					x = i;
 					y = position;
 				}
@@ -61,11 +60,11 @@ public class MainActivity extends Activity {
 
 			// Toast.makeText(getApplicationContext(), currentDay+" "+position,
 			// Toast.LENGTH_LONG).show();
-			Log.d("clickListener", "" + x + " " + y);
+//			Log.d("clickListener", "" + x + " " + y);
 
 			// x - 1~6, y - 1~9, xy/10 = x, xy%10 = y
-			int xy = ((x + 1) * 10) + (y + 1);
-			Log.d("clickListener", "" + xy);
+//			int xy = ((x + 1) * 10) + (y + 1);
+//			Log.d("clickListener", "" + xy);
 
 			 ClassInfo ci = (ClassInfo)mCustomArray.get(x).getItem(y);
 			
@@ -124,7 +123,7 @@ public class MainActivity extends Activity {
 			mAdapter.add((i + 8) + ":" + 30);
 		}
 
-		ClassInfo ci = new ClassInfo("", "", 0, "");
+		ClassInfo ci = new ClassInfo("", "", "");
 
 		// for(int i = 0; i < 9; i++)
 		// {
@@ -141,7 +140,7 @@ public class MainActivity extends Activity {
 			}
 		}
 
-		ClassInfo ci1 = new ClassInfo("Chemistry", "Mon", 1, "example");
+		ClassInfo ci1 = new ClassInfo("Chemistry", "Mon-1", "example");
 		// mAdapterMon.edit(0,ci1);
 		mCustomArray.get(0).edit(3, ci1);
 		mCustomArray.get(2).edit(0, ci1);
@@ -160,16 +159,23 @@ public class MainActivity extends Activity {
 
 		Log.d("MainResult", "" + "result code is " + resultCode);
 
-		String TEXT = data.getStringExtra("TEXT");
-		Log.d("MainResult", "TEXT is " + TEXT);
+//		String TEXT = data.getStringExtra("TEXT");
+		
+//		Log.d("MainResult", "TEXT is " + TEXT);
+		ClassInfo ci;
+		Bundle bundle = data.getExtras();
+		ci = (ClassInfo) bundle.get("ClassInfo");
 
 		if (resultCode == 2001) {
-			ClassInfo ci = new ClassInfo(TEXT, Day[x], y + 1, "ex");
+//			ClassInfo ci = new ClassInfo(TEXT, Day[x]+"-"+(y+1), "ex");
 			mCustomArray.get(x).edit(y, ci);
 			mCustomArray.get(x).notifyDataSetChanged();
 
 			Log.d("MainResult", "x is " + x + " y is " + y);
 			Log.d("MainResult", "Class name is " + ci.name);
+			Log.d("MainResult", "Class day is " + ci.day);
+			Log.d("MainResult", "Class detail is " + ci.detail);
+			
 		}
 
 		super.onActivityResult(requestCode, resultCode, data);

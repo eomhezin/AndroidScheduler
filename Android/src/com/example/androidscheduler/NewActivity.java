@@ -30,18 +30,7 @@ public class NewActivity extends Activity {
 		ClassInfo ci = bundle.getParcelable("ClassInfo");
 
 		text1.setText(ci.getName());
-		if (ci.day.size() != 0) {
-			Log.d("NewResult","day size is " + ci.day.size());
-			String DayNumber = null;
-			
-			for (int i = 0; i < ci.day.size(); i++) {
-//				DayNumber = ci.day.get(i) + "-" + ci.number.get(i) + " ";
-//				Log.d("NewResult","DayNum is "+DayNumber);
-				Log.d("NewResult","day " + ci.day.get(i) + " number " + ci.day.get(i)); // is not correct data
-			}
-			
-			text2.setText(DayNumber);
-		}
+		text2.setText(ci.getDay());
 		text3.setText(ci.getDetail());
 		Log.d("NewResult", "NewActiviy CI Name is " + ci.getName());
 	}
@@ -58,11 +47,13 @@ public class NewActivity extends Activity {
 	public void onButtonPushClicked(View v) {
 
 		String name 		= text1.getText().toString();
-		String dayNumber 	= text2.getText().toString();
+		String day 			= text2.getText().toString();
 		String detail		= text3.getText().toString();
 
+		ClassInfo ci 		= new ClassInfo(name,day,detail);
 		Intent intent = new Intent();
 
+		intent.putExtra("ClassInfo", ci);
 		setResult(2001, intent);
 		finish();
 	}
