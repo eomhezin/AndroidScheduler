@@ -32,35 +32,34 @@ public class MainActivity extends Activity {
 	private String[]	  Day = {"Mon","Tue","Wed","Thu","Fri","Sat"};
 	
 	//item listener
-		public class CustomClickListner implements OnItemClickListener{
+	public class CustomClickListner implements OnItemClickListener {
 
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position,
-					long id) {
-				Intent intent = new Intent(MainActivity.this, NewActivity.class);
-				
-				int monId 			= mListViewMon.getId();
-				int currentId 		= parent.getId();
-				String currentDay	= new String();
-				
-				for(int i = 0; i < 6; i++)
-				{
-					if((currentId - monId) == i)
-					{
-						currentDay = Day[i];	// return <- click item - day
-					}
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			Intent intent = new Intent(MainActivity.this, NewActivity.class);
+
+			int monId = mListViewMon.getId();
+			int currentId = parent.getId();
+			String currentDay = new String();
+
+			for (int i = 0; i < 6; i++) {
+				if ((currentId - monId) == i) {
+					currentDay = Day[i]; // return <- click item - day
 				}
-				Toast.makeText(getApplicationContext(), currentDay, Toast.LENGTH_LONG).show();
-				startActivityForResult(intent, 1001);
 			}
+			Toast.makeText(getApplicationContext(), currentDay,
+					Toast.LENGTH_LONG).show();
+			startActivityForResult(intent, 1001);
 		}
+	}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-     // listview - adapterview -- need adapter
+        
+        // listview - adapterview -- need adapter
         mAdapter = new mCustomAdapter();
         mAdapterMon = new CustomAdapter();
         mAdapterTue = new CustomAdapter();
@@ -88,8 +87,7 @@ public class MainActivity extends Activity {
         
         for(int i = 1; i < 10; i++)
         {
-        	// mAdapter 1~9 class (time)
-        	mAdapter.add(i+"교시    "+(i+8)+":"+30);
+        	mAdapter.add((i+8)+":"+30);
         }
         
         ClassInfo ci = new ClassInfo("", "Wed", 3, "303");
